@@ -86,6 +86,7 @@ def Dynamic(start):
     highestQuery = session.query(func.max(measurements.tobs)).filter(measurements.date >= start).all()
     averageQuery = session.query(func.avg(measurements.tobs)).filter(measurements.date >= start).all()
 
+    #query results to jsonify- able format and return
     summary = {"lowest temp" :lowestQuery[0], "highest temp":highestQuery[0],"average temp": averageQuery[0]}
     return jsonify(summary)
 
@@ -94,11 +95,12 @@ def Dynamic(start, end):
     #Engine session
     session = Session(engine)
 
-    #Query for start date summary
+    #Query for start and end date summary
     lowestQuery = session.query(func.min(measurements.tobs)).filter(measurements.date.between(start, end)).all()
     highestQuery = session.query(func.max(measurements.tobs)).filter(measurements.date.between(start, end)).all()
     averageQuery = session.query(func.avg(measurements.tobs)).filter(measurements.date.between(start, end)).all()
 
+    #query results to jsonify- able format and return
     summary = {"lowest temp" :lowestQuery[0], "highest temp":highestQuery[0],"average temp": averageQuery[0]}
     return jsonify(summary)
     
