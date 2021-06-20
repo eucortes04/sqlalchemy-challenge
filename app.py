@@ -1,6 +1,8 @@
 #Flask
 from flask import Flask, jsonify
 from flask.app import Flask
+
+import numpy as np
 #sqlalchemy
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
@@ -68,15 +70,17 @@ def Tobs():
     mostActiveStation = 'USC00511918'
 
     #Query for most active station
+    #BROKEN HERE filtering by date returns results, filtering by station returns results but filtering both returns nothing...
     mostActiveQuery = session.query(measurements.date, measurements.tobs).filter(measurements.date.between('2016-08-23','2017-08-23')).filter(measurements.station == mostActiveStation)
     
+
     #iterate over rows to convert from query object to dictionary
     mostActiveDict = {date:tobs for date , tobs in mostActiveQuery}
 
     return jsonify(mostActiveDict)
 
 #/start
-@app.route('api/v1.0/temp/<start>')
+@app.route('/api/v1.0/temp/<start>')
 def Dynamic(start):
     #Engine session
     session = Session(engine)
@@ -90,8 +94,8 @@ def Dynamic(start):
     summary = {"lowest temp" :lowestQuery[0], "highest temp":highestQuery[0],"average temp": averageQuery[0]}
     return jsonify(summary)
 
-@app.route('api/v1.0/temp/<start>/<end>')
-def Dynamic(start, end):
+@app.route('/api/v1.0/temp/<start>/<end>')
+def Dynamic2(start, end):
     #Engine session
     session = Session(engine)
 
